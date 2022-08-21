@@ -3,7 +3,7 @@
 
 [bootstrap-5-wordpress-navbar-walker](https://github.com/AlexWebLab/bootstrap-5-wordpress-navbar-walker)
 
-How it looks: 
+Bootstrap nav walker with Tabler-icons support. How it looks: 
 ![navbar with icons-1](https://i.imgur.com/Q3MJIrA.png)
 Dropdown
 ![navbar with icons-dropdown](https://i.imgur.com/9KopNd8.png)
@@ -68,7 +68,7 @@ wp_nav_menu(array(
 ```
   
 
-4. Add the following html code in your header.php file or wherever you want to place your menu:
+4. Add tabler icons to your webpage. 
 
 Go [tabler icons](https://tabler-icons.io/) and add link to css icons inside `<head>` tags.
 

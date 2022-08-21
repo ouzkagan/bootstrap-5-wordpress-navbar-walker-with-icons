@@ -1,5 +1,5 @@
 <?php
-// bootstrap 5 wp_nav_menu walker
+// bootstrap 5 wp_nav_menu walker with icons
 class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
 {
   private $current_item;
@@ -41,16 +41,16 @@ class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
     $class_names = $value = '';
 
     $classes = empty($item->classes) ? array() : (array) $item->classes;
-		
-    // get first two classes from menu item classes | e.g. "ti ti-home" 
-    $icon_class = $classes[0] . ' ' .  $classes[1];
-		
-		//** remove first 2 classes
-		array_shift($classes);
-		array_shift($classes);
-		
-    // table icon works with classes
-		$icon_tag = '<i class="'.$icon_class.'"></i>';		
+		$icon_tag = '';
+		if( $classes[0] == 'ti'){
+			// get first two classes from menu item classes | e.g. "ti ti-home" 
+			$icon_class = $classes[0] . ' ' .  $classes[1];
+			//** remove first 2 classes
+			array_shift($classes);
+			array_shift($classes);
+			// table icon works with classes
+			$icon_tag = '<i class="'.$icon_class.'"></i>';		
+		}
     
 		$classes[] = ($args->walker->has_children) ? 'dropdown' : '';
     $classes[] = 'nav-item';
@@ -84,5 +84,3 @@ class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
     $output .= apply_filters('walker_nav_menu_start_el', $item_output, $item, $depth, $args);
   }
 }
-// register a new menu
-register_nav_menu('main-menu', 'Main menu');

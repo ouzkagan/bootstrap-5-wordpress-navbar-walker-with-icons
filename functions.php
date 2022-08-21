@@ -28,7 +28,7 @@ class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
     }
     $indent = str_repeat("\t", $depth);
     $submenu = ($depth > 0) ? ' sub-menu' : '';
-    $output .= "\n$indent<ul class=\"dropdown-menu$submenu " . esc_attr(implode(" ",$dropdown_menu_class)) . " depth_$depth\">\n";
+    $output .= "\n$indent<ul class=\"dropdown-menu sub-menu$submenu " . esc_attr(implode(" ",$dropdown_menu_class)) . " depth_$depth\">\n";
   }
 
   function start_el(&$output, $item, $depth = 0, $args = null, $id = 0)
@@ -41,8 +41,18 @@ class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
     $class_names = $value = '';
 
     $classes = empty($item->classes) ? array() : (array) $item->classes;
-
-    $classes[] = ($args->walker->has_children) ? 'dropdown' : '';
+		
+    // get first two classes from menu item classes | e.g. "ti ti-home" 
+    $icon_class = $classes[0] . ' ' .  $classes[1];
+		
+		//** remove first 2 classes
+		array_shift($classes);
+		array_shift($classes);
+		
+    // table icon works with classes
+		$icon_tag = '<i class="'.$icon_class.'"></i>';		
+    
+		$classes[] = ($args->walker->has_children) ? 'dropdown' : '';
     $classes[] = 'nav-item';
     $classes[] = 'nav-item-' . $item->ID;
     if ($depth && $args->walker->has_children) {
@@ -56,19 +66,18 @@ class bootstrap_5_wp_nav_menu_walker extends Walker_Nav_menu
     $id = strlen($id) ? ' id="' . esc_attr($id) . '"' : '';
 
     $output .= $indent . '<li ' . $id . $value . $class_names . $li_attributes . '>';
-
     $attributes = !empty($item->attr_title) ? ' title="' . esc_attr($item->attr_title) . '"' : '';
     $attributes .= !empty($item->target) ? ' target="' . esc_attr($item->target) . '"' : '';
     $attributes .= !empty($item->xfn) ? ' rel="' . esc_attr($item->xfn) . '"' : '';
     $attributes .= !empty($item->url) ? ' href="' . esc_attr($item->url) . '"' : '';
-
     $active_class = ($item->current || $item->current_item_ancestor || in_array("current_page_parent", $item->classes, true) || in_array("current-post-ancestor", $item->classes, true)) ? 'active' : '';
     $nav_link_class = ( $depth > 0 ) ? 'dropdown-item ' : 'nav-link ';
     $attributes .= ( $args->walker->has_children ) ? ' class="'. $nav_link_class . $active_class . ' dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"' : ' class="'. $nav_link_class . $active_class . '"';
-
     $item_output = $args->before;
     $item_output .= '<a' . $attributes . '>';
-    $item_output .= $args->link_before . apply_filters('the_title', $item->title, $item->ID) . $args->link_after;
+    // insert icon to nav-link
+    $item_output =$item_output . ' ' . $icon_tag ;
+		$item_output .= $args->link_before . apply_filters('the_title', $item->title, $item->ID) . $args->link_after;
     $item_output .= '</a>';
     $item_output .= $args->after;
 
